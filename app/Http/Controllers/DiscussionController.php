@@ -10,12 +10,7 @@ class DiscussionController extends Controller
     public function index()
     {
         $discussions = Discussion::all();
-        return view('discussions.index', compact('discussions'));
-    }
-
-    public function create()
-    {
-        return view('discussions.create');
+        return response()->json($discussions, 200);
     }
 
     public function store(Request $request)
@@ -24,45 +19,48 @@ class DiscussionController extends Controller
             'user_id' => 'required',
             'tag_id' => 'required',
             'title' => 'required',
-            'body' => 'required',
+            'body' => 'required'
         ]);
 
-        Discussion::create($request->all());
-
-        return redirect()->route('discussions.index')
-                         ->with('success', 'Discussion created successfully.');
+        $discussion = Discussion::create($request->all());
+        return response()->json($discussion, 201);
     }
 
-    public function show(Discussion $discussion)
+    public function show($id)
     {
-        return view('discussions.show', compact('discussion'));
+        $discussion = Discussion::find($id);
+        if (!$discussion) {
+            return response()->json('Discussion not found', 404);
+        }
+        return response()->json($discussion, 200);
     }
 
-    public function edit(Discussion $discussion)
+    public function update(Request $request, $id)
     {
-        return view('discussions.edit', compact('discussion'));
-    }
+        $discussion = Discussion::find($id);
+        if (!$discussion) {
+            return response()->json('Discussion not found', 404);
+        }
 
-    public function update(Request $request, Discussion $discussion)
-    {
         $request->validate([
             'user_id' => 'required',
             'tag_id' => 'required',
             'title' => 'required',
-            'body' => 'required',
+            'body' => 'required'
         ]);
 
         $discussion->update($request->all());
-
-        return redirect()->route('discussions.index')
-                         ->with('success', 'Discussion updated successfully.');
+        return response()->json($discussion, 200);
     }
 
-    public function destroy(Discussion $discussion)
+    public function destroy($id)
     {
-        $discussion->delete();
+        $discussion = Discussion::find($id);
+        if (!$discussion) {
+            return response()->json('Discussion not found', 404);
+        }
 
-        return redirect()->route('discussions.index')
-                         ->with('success', 'Discussion deleted successfully.');
+        $discussion->delete();
+        return response()->json('Discussion deleted successfully', 200);
     }
 }

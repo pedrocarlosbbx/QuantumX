@@ -9,9 +9,8 @@ class CuratedArticle extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'article_id',
-    ];
+    protected $table = 'curated_articles';
+    protected $fillable = ['article_id'];
 
     public function article()
     {

@@ -10,12 +10,7 @@ class CuratedArticleController extends Controller
     public function index()
     {
         $curatedArticles = CuratedArticle::all();
-        return view('curated_articles.index', compact('curatedArticles'));
-    }
-
-    public function create()
-    {
-        return view('curated_articles.create');
+        return response()->json($curatedArticles, 200);
     }
 
     public function store(Request $request)
@@ -24,17 +19,42 @@ class CuratedArticleController extends Controller
             'article_id' => 'required',
         ]);
 
-        CuratedArticle::create($request->all());
-
-        return redirect()->route('curated_articles.index')
-                         ->with('success', 'Curated article created successfully.');
+        $curatedArticle = CuratedArticle::create($request->all());
+        return response()->json($curatedArticle, 201);
     }
 
-    public function destroy(CuratedArticle $curatedArticle)
+    public function show($id)
     {
-        $curatedArticle->delete();
+        $curatedArticle = CuratedArticle::find($id);
+        if (!$curatedArticle) {
+            return response()->json('Curated Article not found', 404);
+        }
+        return response()->json($curatedArticle, 200);
+    }
 
-        return redirect()->route('curated_articles.index')
-                         ->with('success', 'Curated article deleted successfully.');
+    public function update(Request $request, $id)
+    {
+        $curatedArticle = CuratedArticle::find($id);
+        if (!$curatedArticle) {
+            return response()->json('Curated Article not found', 404);
+        }
+
+        $request->validate([
+            'article_id' => 'required',
+        ]);
+
+        $curatedArticle->update($request->all());
+        return response()->json($curatedArticle, 200);
+    }
+
+    public function destroy($id)
+    {
+        $curatedArticle = CuratedArticle::find($id);
+        if (!$curatedArticle) {
+            return response()->json('Curated Article not found', 404);
+        }
+
+        $curatedArticle->delete();
+        return response()->json('Curated Article deleted successfully', 200);
     }
 }

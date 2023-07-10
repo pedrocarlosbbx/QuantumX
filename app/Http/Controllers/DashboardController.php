@@ -10,33 +10,55 @@ class DashboardController extends Controller
     public function index()
     {
         $dashboards = Dashboard::all();
-        return view('dashboards.index', compact('dashboards'));
-    }
-
-    public function create()
-    {
-        return view('dashboards.create');
+        return response()->json($dashboards, 200);
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'user_id' => 'required',
-            'recommended_article_id' => 'nullable',
-            'discussion_id' => 'nullable',
+            'recommended_article_id' => 'required',
+            'discussion_id' => 'required',
         ]);
 
-        Dashboard::create($request->all());
-
-        return redirect()->route('dashboards.index')
-                         ->with('success', 'Dashboard saved successfully.');
+        $dashboard = Dashboard::create($request->all());
+        return response()->json($dashboard, 201);
     }
 
-    public function destroy(Dashboard $dashboard)
+    public function show($id)
     {
-        $dashboard->delete();
+        $dashboard = Dashboard::find($id);
+        if (!$dashboard) {
+            return response()->json('Dashboard not found', 404);
+        }
+        return response()->json($dashboard, 200);
+    }
 
-        return redirect()->route('dashboards.index')
-                         ->with('success', 'Dashboard deleted successfully.');
+    public function update(Request $request, $id)
+    {
+        $dashboard = Dashboard::find($id);
+        if (!$dashboard) {
+            return response()->json('Dashboard not found', 404);
+        }
+
+        $request->validate([
+            'user_id' => 'required',
+            'recommended_article_id' => 'required',
+            'discussion_id' => 'required',
+        ]);
+
+        $dashboard->update($request->all());
+        return response()->json($dashboard, 200);
+    }
+
+    public function destroy($id)
+    {
+        $dashboard = Dashboard::find($id);
+        if (!$dashboard) {
+            return response()->json('Dashboard not found', 404);
+        }
+
+        $dashboard->delete();
+        return response()->json('Dashboard deleted successfully', 200);
     }
 }

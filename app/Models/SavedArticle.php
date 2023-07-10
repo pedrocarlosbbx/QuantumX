@@ -9,10 +9,8 @@ class SavedArticle extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'article_id',
-    ];
+    protected $table = 'saved_articles';
+    protected $fillable = ['user_id', 'article_id'];
 
     public function user()
     {

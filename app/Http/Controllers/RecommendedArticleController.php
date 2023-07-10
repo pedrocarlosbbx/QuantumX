@@ -10,12 +10,7 @@ class RecommendedArticleController extends Controller
     public function index()
     {
         $recommendedArticles = RecommendedArticle::all();
-        return view('recommended_articles.index', compact('recommendedArticles'));
-    }
-
-    public function create()
-    {
-        return view('recommended_articles.create');
+        return response()->json($recommendedArticles, 200);
     }
 
     public function store(Request $request)
@@ -25,17 +20,43 @@ class RecommendedArticleController extends Controller
             'curated_article_id' => 'required',
         ]);
 
-        RecommendedArticle::create($request->all());
-
-        return redirect()->route('recommended_articles.index')
-                         ->with('success', 'Recommended article created successfully.');
+        $recommendedArticle = RecommendedArticle::create($request->all());
+        return response()->json($recommendedArticle, 201);
     }
 
-    public function destroy(RecommendedArticle $recommendedArticle)
+    public function show($id)
     {
-        $recommendedArticle->delete();
+        $recommendedArticle = RecommendedArticle::find($id);
+        if (!$recommendedArticle) {
+            return response()->json('Recommended Article not found', 404);
+        }
+        return response()->json($recommendedArticle, 200);
+    }
 
-        return redirect()->route('recommended_articles.index')
-                         ->with('success', 'Recommended article deleted successfully.');
+    public function update(Request $request, $id)
+    {
+        $recommendedArticle = RecommendedArticle::find($id);
+        if (!$recommendedArticle) {
+            return response()->json('Recommended Article not found', 404);
+        }
+
+        $request->validate([
+            'user_id' => 'required',
+            'curated_article_id' => 'required',
+        ]);
+
+        $recommendedArticle->update($request->all());
+        return response()->json($recommendedArticle, 200);
+    }
+
+    public function destroy($id)
+    {
+        $recommendedArticle = RecommendedArticle::find($id);
+        if (!$recommendedArticle) {
+            return response()->json('Recommended Article not found', 404);
+        }
+
+        $recommendedArticle->delete();
+        return response()->json('Recommended Article deleted successfully', 200);
     }
 }

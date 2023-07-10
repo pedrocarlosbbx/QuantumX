@@ -7,25 +7,58 @@ use App\Models\DiscussionComment;
 
 class DiscussionCommentController extends Controller
 {
+    public function index()
+    {
+        $discussionComments = DiscussionComment::all();
+        return response()->json($discussionComments, 200);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
             'user_id' => 'required',
             'discussion_id' => 'required',
-            'body' => 'required',
+            'body' => 'required'
         ]);
 
-        DiscussionComment::create($request->all());
-
-        return redirect()->back()
-                         ->with('success', 'Discussion comment created successfully.');
+        $discussionComment = DiscussionComment::create($request->all());
+        return response()->json($discussionComment, 201);
     }
 
-    public function destroy(DiscussionComment $comment)
+    public function show($id)
     {
-        $comment->delete();
+        $discussionComment = DiscussionComment::find($id);
+        if (!$discussionComment) {
+            return response()->json('Discussion Comment not found', 404);
+        }
+        return response()->json($discussionComment, 200);
+    }
 
-        return redirect()->back()
-                         ->with('success', 'Discussion comment deleted successfully.');
+    public function update(Request $request, $id)
+    {
+        $discussionComment = DiscussionComment::find($id);
+        if (!$discussionComment) {
+            return response()->json('Discussion Comment not found', 404);
+        }
+
+        $request->validate([
+            'user_id' => 'required',
+            'discussion_id' => 'required',
+            'body' => 'required'
+        ]);
+
+        $discussionComment->update($request->all());
+        return response()->json($discussionComment, 200);
+    }
+
+    public function destroy($id)
+    {
+        $discussionComment = DiscussionComment::find($id);
+        if (!$discussionComment) {
+            return response()->json('Discussion Comment not found', 404);
+        }
+
+        $discussionComment->delete();
+        return response()->json('Discussion Comment deleted successfully', 200);
     }
 }

@@ -9,13 +9,8 @@ class UserDetailController extends Controller
 {
     public function index()
     {
-        $user_details = UserDetail::all();
-        return view('user_details.index', compact('user_details'));
-    }
-
-    public function create()
-    {
-        return view('user_details.create');
+        $userDetails = UserDetail::all();
+        return response()->json($userDetails, 200);
     }
 
     public function store(Request $request)
@@ -26,41 +21,44 @@ class UserDetailController extends Controller
             'bio' => 'required',
         ]);
 
-        UserDetail::create($request->all());
-
-        return redirect()->route('user_details.index')
-                         ->with('success', 'UserDetail created successfully.');
+        $userDetail = UserDetail::create($request->all());
+        return response()->json($userDetail, 201);
     }
 
-    public function show(UserDetail $profile)
+    public function show($id)
     {
-        return view('user_details.show', compact('profile'));
+        $userDetail = UserDetail::find($id);
+        if (!$userDetail) {
+            return response()->json('User Detail not found', 404);
+        }
+        return response()->json($userDetail, 200);
     }
 
-    public function edit(UserDetail $profile)
+    public function update(Request $request, $id)
     {
-        return view('user_details.edit', compact('profile'));
-    }
+        $userDetail = UserDetail::find($id);
+        if (!$userDetail) {
+            return response()->json('User Detail not found', 404);
+        }
 
-    public function update(Request $request, UserDetail $profile)
-    {
         $request->validate([
             'user_id' => 'required',
             'foto_profile' => 'required',
             'bio' => 'required',
         ]);
 
-        $profile->update($request->all());
-
-        return redirect()->route('user_details.index')
-                         ->with('success', 'UserDetail updated successfully.');
+        $userDetail->update($request->all());
+        return response()->json($userDetail, 200);
     }
 
-    public function destroy(UserDetail $profile)
+    public function destroy($id)
     {
-        $profile->delete();
+        $userDetail = UserDetail::find($id);
+        if (!$userDetail) {
+            return response()->json('User Detail not found', 404);
+        }
 
-        return redirect()->route('user_details.index')
-                         ->with('success', 'UserDetail deleted successfully.');
+        $userDetail->delete();
+        return response()->json('User Detail deleted successfully', 200);
     }
 }

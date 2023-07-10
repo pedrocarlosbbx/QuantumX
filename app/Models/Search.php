@@ -10,14 +10,7 @@ class Search extends Model
     use HasFactory;
 
     protected $table = 'searchs';
-
-    protected $fillable = [
-        'user_id',
-        'category_id',
-        'article_id',
-        'tag_id',
-        'keyword',
-    ];
+    protected $fillable = ['user_id', 'category_id', 'article_id', 'tag_id', 'keyword'];
 
     public function user()
     {

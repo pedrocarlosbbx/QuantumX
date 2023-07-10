@@ -10,53 +10,51 @@ class TagController extends Controller
     public function index()
     {
         $tags = Tag::all();
-        return view('tags.index', compact('tags'));
-    }
-
-    public function create()
-    {
-        return view('tags.create');
+        return response()->json($tags, 200);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'tag_name' => 'required',
+            'tag_name' => 'required|unique:tags'
         ]);
 
-        Tag::create($request->all());
-
-        return redirect()->route('tags.index')
-                         ->with('success', 'Tag created successfully.');
+        $tag = Tag::create($request->all());
+        return response()->json($tag, 201);
     }
 
-    public function show(Tag $tag)
+    public function show($id)
     {
-        return view('tags.show', compact('tag'));
+        $tag = Tag::find($id);
+        if (!$tag) {
+            return response()->json('Tag not found', 404);
+        }
+        return response()->json($tag, 200);
     }
 
-    public function edit(Tag $tag)
+    public function update(Request $request, $id)
     {
-        return view('tags.edit', compact('tag'));
-    }
+        $tag = Tag::find($id);
+        if (!$tag) {
+            return response()->json('Tag not found', 404);
+        }
 
-    public function update(Request $request, Tag $tag)
-    {
         $request->validate([
-            'tag_name' => 'required',
+            'tag_name' => 'required|unique:tags,tag_name,' . $id
         ]);
 
         $tag->update($request->all());
-
-        return redirect()->route('tags.index')
-                         ->with('success', 'Tag updated successfully.');
+        return response()->json($tag, 200);
     }
 
-    public function destroy(Tag $tag)
+    public function destroy($id)
     {
-        $tag->delete();
+        $tag = Tag::find($id);
+        if (!$tag) {
+            return response()->json('Tag not found', 404);
+        }
 
-        return redirect()->route('tags.index')
-                         ->with('success', 'Tag deleted successfully.');
+        $tag->delete();
+        return response()->json('Tag deleted successfully', 200);
     }
 }

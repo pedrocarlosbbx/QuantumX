@@ -2,67 +2,96 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Article;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
 {
     public function index()
     {
-        $articles = Article::all();
-        return view('articles.index', compact('articles'));
-    }
+        $articles = Article::latest()->paginate(10);
 
-    public function create()
-    {
-        return view('articles.create');
+        return response()->json($articles, 200);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required',
+        $validator = Validator::make($request->all(), [
             'article_title' => 'required',
             'body' => 'required',
-            'foto_article' => 'required',
+            'foto_article' => 'required|file|image|mimes:jpeg,png,jpg',
         ]);
 
-        Article::create($request->all());
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
 
-        return redirect()->route('articles.index')
-                         ->with('success', 'Article created successfully.');
+        $file = $request->file('foto_article');
+        $file_name = time() . "_" . $file->getClientOriginalName();
+        $destination = 'fotoarticles';
+        $file->move($destination, $file_name);
+
+        $article = new Article();
+        $article->article_title = $request->article_title;
+        $article->body = $request->body;
+        $article->foto_article = $destination . "/" . $file_name;
+        $article->save();
+
+        return response()->json($article, 200);
     }
 
-    public function show(Article $article)
+    public function show($id)
     {
-        return view('articles.show', compact('article'));
+        $article = Article::find($id);
+        if (is_null($article)) {
+            return response()->json('Data not found', 404);
+        }
+        return response()->json($article, 200);
     }
 
-    public function edit(Article $article)
+    public function update(Request $request, $id)
     {
-        return view('articles.edit', compact('article'));
-    }
-
-    public function update(Request $request, Article $article)
-    {
-        $request->validate([
-            'user_id' => 'required',
+        $validator = Validator::make($request->all(), [
             'article_title' => 'required',
             'body' => 'required',
-            'foto_article' => 'required',
+            'foto_article' => 'file|image|mimes:jpeg,png,jpg',
         ]);
 
-        $article->update($request->all());
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
 
-        return redirect()->route('articles.index')
-                         ->with('success', 'Article updated successfully.');
+        if (!is_null($request->foto_article)) {
+            $file = $request->file('foto_article');
+            $file_name = time() . "_" . $file->getClientOriginalName();
+            $destination = 'fotoarticles';
+            $file->move($destination, $file_name);
+        }
+
+        $article = Article::find($id);
+        if (is_null($article)) {
+            return response()->json('Data tidak ditemukan', 404);
+        }
+
+        $article->article_title = $request->article_title;
+        $article->body = $request->body;
+        if (!is_null($request->foto_article)) {
+            $article->foto_article = $destination . "/" . $file_name;
+        }
+        $article->save();
+
+        return response()->json($article, 200);
     }
 
-    public function destroy(Article $article)
+    public function destroy($id)
     {
-        $article->delete();
+        $article = Article::find($id);
+        if (!is_null($article)) {
+            $article->delete();
+        }
 
-        return redirect()->route('articles.index')
-                         ->with('success', 'Article deleted successfully.');
+        return response()->json("Berhasil menghapus data", 200);
     }
 }

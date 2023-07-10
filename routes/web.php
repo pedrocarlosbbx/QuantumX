@@ -16,6 +16,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SavedArticleController;
 use App\Http\Controllers\RecommendedArticleController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserDetailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,7 +45,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::resource('profiles', ProfileController::class);
+Route::resource('user_detail', UserDetailController::class);
 Route::resource('articles', ArticleController::class);
 Route::resource('categories', CategoryController::class);
 Route::resource('article_categories', ArticleCategoryController::class);

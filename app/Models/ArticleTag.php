@@ -10,11 +10,15 @@ class ArticleTag extends Model
     use HasFactory;
 
     protected $table = 'article_tag';
+    protected $fillable = ['article_id', 'tag_id'];
 
-    protected $fillable = [
-        'article_id',
-        'tag_id',
-    ];
+    public function article()
+    {
+        return $this->belongsTo(Article::class);
+    }
 
-    public $timestamps = false;
+    public function tag()
+    {
+        return $this->belongsTo(Tag::class);
+    }
 }

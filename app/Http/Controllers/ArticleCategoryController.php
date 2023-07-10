@@ -7,24 +7,56 @@ use App\Models\ArticleCategory;
 
 class ArticleCategoryController extends Controller
 {
+    public function index()
+    {
+        $articleCategories = ArticleCategory::all();
+        return response()->json($articleCategories, 200);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
             'article_id' => 'required',
-            'category_id' => 'required',
+            'category_id' => 'required'
         ]);
 
-        ArticleCategory::create($request->all());
-
-        return redirect()->back()
-                         ->with('success', 'Article category created successfully.');
+        $articleCategory = ArticleCategory::create($request->all());
+        return response()->json($articleCategory, 201);
     }
 
-    public function destroy(ArticleCategory $articleCategory)
+    public function show($id)
     {
-        $articleCategory->delete();
+        $articleCategory = ArticleCategory::find($id);
+        if (!$articleCategory) {
+            return response()->json('Article Category not found', 404);
+        }
+        return response()->json($articleCategory, 200);
+    }
 
-        return redirect()->back()
-                         ->with('success', 'Article category deleted successfully.');
+    public function update(Request $request, $id)
+    {
+        $articleCategory = ArticleCategory::find($id);
+        if (!$articleCategory) {
+            return response()->json('Article Category not found', 404);
+        }
+
+        $request->validate([
+            'article_id' => 'required',
+            'category_id' => 'required'
+        ]);
+
+        $articleCategory->update($request->all());
+        return response()->json($articleCategory, 200);
+    }
+
+    public function destroy($id)
+    {
+        $articleCategory = ArticleCategory::find($id);
+        if (!$articleCategory) {
+            return response()->json('Article Category not found', 404);
+        }
+
+        $articleCategory->delete();
+        return response()->json('Article Category deleted successfully', 200);
     }
 }

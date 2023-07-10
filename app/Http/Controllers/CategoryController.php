@@ -10,53 +10,51 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return view('categories.index', compact('categories'));
-    }
-
-    public function create()
-    {
-        return view('categories.create');
+        return response()->json($categories, 200);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'category_name' => 'required',
+            'category_name' => 'required|unique:categories'
         ]);
 
-        Category::create($request->all());
-
-        return redirect()->route('categories.index')
-                         ->with('success', 'Category created successfully.');
+        $category = Category::create($request->all());
+        return response()->json($category, 201);
     }
 
-    public function show(Category $category)
+    public function show($id)
     {
-        return view('categories.show', compact('category'));
+        $category = Category::find($id);
+        if (!$category) {
+            return response()->json('Category not found', 404);
+        }
+        return response()->json($category, 200);
     }
 
-    public function edit(Category $category)
+    public function update(Request $request, $id)
     {
-        return view('categories.edit', compact('category'));
-    }
+        $category = Category::find($id);
+        if (!$category) {
+            return response()->json('Category not found', 404);
+        }
 
-    public function update(Request $request, Category $category)
-    {
         $request->validate([
-            'category_name' => 'required',
+            'category_name' => 'required|unique:categories,category_name,' . $id
         ]);
 
         $category->update($request->all());
-
-        return redirect()->route('categories.index')
-                         ->with('success', 'Category updated successfully.');
+        return response()->json($category, 200);
     }
 
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        $category->delete();
+        $category = Category::find($id);
+        if (!$category) {
+            return response()->json('Category not found', 404);
+        }
 
-        return redirect()->route('categories.index')
-                         ->with('success', 'Category deleted successfully.');
+        $category->delete();
+        return response()->json('Category deleted successfully', 200);
     }
 }

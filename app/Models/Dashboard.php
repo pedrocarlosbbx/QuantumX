@@ -9,11 +9,8 @@ class Dashboard extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'recommended_article_id',
-        'discussion_id',
-    ];
+    protected $table = 'dashboards';
+    protected $fillable = ['user_id', 'recommended_article_id', 'discussion_id'];
 
     public function user()
     {

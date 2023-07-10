@@ -10,7 +10,7 @@ class SavedArticleController extends Controller
     public function index()
     {
         $savedArticles = SavedArticle::all();
-        return view('saved_articles.index', compact('savedArticles'));
+        return response()->json($savedArticles, 200);
     }
 
     public function store(Request $request)
@@ -20,17 +20,43 @@ class SavedArticleController extends Controller
             'article_id' => 'required',
         ]);
 
-        SavedArticle::create($request->all());
-
-        return redirect()->back()
-                         ->with('success', 'Article saved successfully.');
+        $savedArticle = SavedArticle::create($request->all());
+        return response()->json($savedArticle, 201);
     }
 
-    public function destroy(SavedArticle $savedArticle)
+    public function show($id)
     {
-        $savedArticle->delete();
+        $savedArticle = SavedArticle::find($id);
+        if (!$savedArticle) {
+            return response()->json('Saved Article not found', 404);
+        }
+        return response()->json($savedArticle, 200);
+    }
 
-        return redirect()->back()
-                         ->with('success', 'Article unsaved successfully.');
+    public function update(Request $request, $id)
+    {
+        $savedArticle = SavedArticle::find($id);
+        if (!$savedArticle) {
+            return response()->json('Saved Article not found', 404);
+        }
+
+        $request->validate([
+            'user_id' => 'required',
+            'article_id' => 'required',
+        ]);
+
+        $savedArticle->update($request->all());
+        return response()->json($savedArticle, 200);
+    }
+
+    public function destroy($id)
+    {
+        $savedArticle = SavedArticle::find($id);
+        if (!$savedArticle) {
+            return response()->json('Saved Article not found', 404);
+        }
+
+        $savedArticle->delete();
+        return response()->json('Saved Article deleted successfully', 200);
     }
 }
