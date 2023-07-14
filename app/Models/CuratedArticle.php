@@ -9,7 +9,7 @@ class CuratedArticle extends Model
 {
     use HasFactory;
 
-    protected $table = 'curated_articles';
+    protected $table = 'curated_article';
     protected $fillable = ['article_id'];
 
     public function article()

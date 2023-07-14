@@ -9,7 +9,7 @@ class RecommendedArticle extends Model
 {
     use HasFactory;
 
-    protected $table = 'recommended_articles';
+    protected $table = 'recommended_article';
     protected $fillable = ['user_id', 'curated_article_id'];
 
     public function user()

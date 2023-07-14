@@ -9,8 +9,8 @@ class DiscussionCommentController extends Controller
 {
     public function index()
     {
-        $discussionComments = DiscussionComment::all();
-        return response()->json($discussionComments, 200);
+        $discussionComment = DiscussionComment::all();
+        return response()->json($discussionComment, 200);
     }
 
     public function store(Request $request)
