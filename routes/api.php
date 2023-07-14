@@ -31,6 +31,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    // Rute yang hanya bisa diakses oleh pengguna dengan peran admin
+});
+
 Route::group(['prefix' => 'articles'], function () {
     Route::get('/', [ArticleController::class, 'index']);
     Route::post('/', [ArticleController::class, 'store']);
