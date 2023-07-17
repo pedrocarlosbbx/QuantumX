@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('tag_id')->references('id')->on('tags');
             $table->string('title');
             $table->text('text');
-            $table->string('foto_profile')->nullable();
+            $table->binary('image')->nullable();
             $table->timestamps();
         });
     }

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('discussion_id');
             $table->foreign('discussion_id')->references('id')->on('discussions');
             $table->text('text');
-            $table->string('foto_profile')->nullable();
+            $table->binary('image')->nullable();
             $table->timestamps();
         });
     }
