@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\user;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Comment;
 
@@ -18,10 +19,20 @@ class CommentController extends Controller
         $request->validate([
             'user_id' => 'required',
             'article_id' => 'required',
-            'body' => 'required'
+            'text' => 'required',
+            'image' => 'file|image|mimes:jpeg,png,jpg'
         ]);
 
-        $comment = Comment::create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $file_name = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('images'), $file_name);
+            $data['image'] = $file_name;
+        }
+
+        $comment = Comment::create($data);
         return response()->json($comment, 201);
     }
 
@@ -44,10 +55,20 @@ class CommentController extends Controller
         $request->validate([
             'user_id' => 'required',
             'article_id' => 'required',
-            'body' => 'required'
+            'text' => 'required',
+            'image' => 'file|image|mimes:jpeg,png,jpg'
         ]);
 
-        $comment->update($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $file_name = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('images'), $file_name);
+            $data['image'] = $file_name;
+        }
+
+        $comment->update($data);
         return response()->json($comment, 200);
     }
 
@@ -56,6 +77,14 @@ class CommentController extends Controller
         $comment = Comment::find($id);
         if (!$comment) {
             return response()->json('Comment not found', 404);
+        }
+
+        if ($comment->image) {
+            // Delete the comment's image file from the server
+            $image_path = public_path('images') . '/' . $comment->image;
+            if (file_exists($image_path)) {
+                unlink($image_path);
+            }
         }
 
         $comment->delete();

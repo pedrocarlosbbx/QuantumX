@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\user;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Discussion;
 
@@ -19,10 +20,19 @@ class DiscussionController extends Controller
             'user_id' => 'required',
             'tag_id' => 'required',
             'title' => 'required',
-            'body' => 'required'
+            'text' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg'
         ]);
 
-        $discussion = Discussion::create($request->all());
+        $file = $request->file('image');
+        $file_name = time() . "_" . $file->getClientOriginalName();
+        $destination = 'discussion_images';
+        $file->move($destination, $file_name);
+
+        $data = $request->all();
+        $data['image'] = $destination . "/" . $file_name;
+
+        $discussion = Discussion::create($data);
         return response()->json($discussion, 201);
     }
 
@@ -46,8 +56,18 @@ class DiscussionController extends Controller
             'user_id' => 'required',
             'tag_id' => 'required',
             'title' => 'required',
-            'body' => 'required'
+            'text' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg'
         ]);
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $file_name = time() . "_" . $file->getClientOriginalName();
+            $destination = 'discussion_images';
+            $file->move($destination, $file_name);
+
+            $discussion->image = $destination . "/" . $file_name;
+        }
 
         $discussion->update($request->all());
         return response()->json($discussion, 200);

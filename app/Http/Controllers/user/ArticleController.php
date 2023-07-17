@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\user;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
@@ -20,7 +20,7 @@ class ArticleController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'article_title' => 'required',
-            'body' => 'required',
+            'text' => 'required',
             'foto_article' => 'required|file|image|mimes:jpeg,png,jpg',
         ]);
 
@@ -35,7 +35,7 @@ class ArticleController extends Controller
 
         $article = new Article();
         $article->article_title = $request->article_title;
-        $article->body = $request->body;
+        $article->text = $request->text;
         $article->foto_article = $destination . "/" . $file_name;
         $article->save();
 
@@ -55,7 +55,7 @@ class ArticleController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'article_title' => 'required',
-            'body' => 'required',
+            'text' => 'required',
             'foto_article' => 'file|image|mimes:jpeg,png,jpg',
         ]);
 
@@ -76,7 +76,7 @@ class ArticleController extends Controller
         }
 
         $article->article_title = $request->article_title;
-        $article->body = $request->body;
+        $article->text = $request->text;
         if (!is_null($request->foto_article)) {
             $article->foto_article = $destination . "/" . $file_name;
         }

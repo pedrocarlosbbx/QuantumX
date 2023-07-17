@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\user;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\CuratedArticle;
 
@@ -17,6 +18,7 @@ class CuratedArticleController extends Controller
     {
         $request->validate([
             'article_id' => 'required',
+            'status' => 'required'
         ]);
 
         $curatedArticle = CuratedArticle::create($request->all());
@@ -41,6 +43,7 @@ class CuratedArticleController extends Controller
 
         $request->validate([
             'article_id' => 'required',
+            'status' => 'required'
         ]);
 
         $curatedArticle->update($request->all());
@@ -57,4 +60,5 @@ class CuratedArticleController extends Controller
         $curatedArticle->delete();
         return response()->json('Curated Article deleted successfully', 200);
     }
+
 }

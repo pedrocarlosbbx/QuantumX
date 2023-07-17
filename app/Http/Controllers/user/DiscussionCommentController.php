@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\user;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\DiscussionComment;
+use App\Models\DiscussionComment;   
 
 class DiscussionCommentController extends Controller
 {
     public function index()
     {
-        $discussionComment = DiscussionComment::all();
-        return response()->json($discussionComment, 200);
+        $discussionComments = DiscussionComment::all();
+        return response()->json($discussionComments, 200);
     }
 
     public function store(Request $request)
@@ -18,10 +19,19 @@ class DiscussionCommentController extends Controller
         $request->validate([
             'user_id' => 'required',
             'discussion_id' => 'required',
-            'body' => 'required'
+            'text' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg'
         ]);
 
-        $discussionComment = DiscussionComment::create($request->all());
+        $file = $request->file('image');
+        $file_name = time() . "_" . $file->getClientOriginalName();
+        $destination = 'discussion_comment_images';
+        $file->move($destination, $file_name);
+
+        $data = $request->all();
+        $data['image'] = $destination . "/" . $file_name;
+
+        $discussionComment = DiscussionComment::create($data);
         return response()->json($discussionComment, 201);
     }
 
@@ -44,8 +54,18 @@ class DiscussionCommentController extends Controller
         $request->validate([
             'user_id' => 'required',
             'discussion_id' => 'required',
-            'body' => 'required'
+            'text' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg'
         ]);
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $file_name = time() . "_" . $file->getClientOriginalName();
+            $destination = 'discussion_comment_images';
+            $file->move($destination, $file_name);
+
+            $discussionComment->image = $destination . "/" . $file_name;
+        }
 
         $discussionComment->update($request->all());
         return response()->json($discussionComment, 200);
@@ -61,4 +81,5 @@ class DiscussionCommentController extends Controller
         $discussionComment->delete();
         return response()->json('Discussion Comment deleted successfully', 200);
     }
+
 }
