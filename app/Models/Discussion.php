@@ -11,7 +11,7 @@ class Discussion extends Model
     use HasFactory;
 
     protected $table = 'discussions';
-    protected $fillable = ['user_id', 'tag_id', 'title', 'body'];
+    protected $fillable = ['user_id', 'tag_id', 'title', 'text', 'image'];
 
     public function user()
     {
