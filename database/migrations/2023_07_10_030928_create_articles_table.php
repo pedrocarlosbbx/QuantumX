@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('article_title');
-            $table->text('body');
-            $table->string('foto_article')->nullable();
+            $table->text('text');
+            $table->binary('foto_article')->nullable();
             $table->timestamps();
         });
     }

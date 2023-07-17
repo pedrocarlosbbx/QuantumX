@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->string('foto_profile')->nullable();
+            $table->binary('foto_profile')->nullable();
             $table->text('bio')->nullable();
             $table->timestamps();
         });

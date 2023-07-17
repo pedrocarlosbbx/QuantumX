@@ -18,7 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('tag_id');
             $table->foreign('tag_id')->references('id')->on('tags');
             $table->string('title');
-            $table->text('body');
+            $table->text('text');
+            $table->string('foto_profile')->nullable();
             $table->timestamps();
         });
     }

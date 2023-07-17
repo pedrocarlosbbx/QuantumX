@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('discussion_id');
             $table->foreign('discussion_id')->references('id')->on('discussions');
-            $table->text('body');
+            $table->text('text');
+            $table->string('foto_profile')->nullable();
             $table->timestamps();
         });
     }
