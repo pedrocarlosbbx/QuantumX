@@ -1,20 +1,20 @@
 <?php
 
+use App\Http\Controllers\user\ArticleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Backend\ArticleController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\TagController;
-use App\Http\Controllers\ArticleTagController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\DiscussionController;
-use App\Http\Controllers\DiscussionCommentController;
-use App\Http\Controllers\CuratedArticleController;
-use App\Http\Controllers\RecommendedArticleController;
-use App\Http\Controllers\SavedArticleController;
-use App\Http\Controllers\UserDetailController;
-use App\Http\Controllers\SearchController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\user\CategoryController;
+use App\Http\Controllers\user\TagController;
+use App\Http\Controllers\user\ArticleTagController;
+use App\Http\Controllers\user\CommentController;
+use App\Http\Controllers\user\DiscussionController;
+use App\Http\Controllers\user\DiscussionCommentController;
+use App\Http\Controllers\user\CuratedArticleController;
+use App\Http\Controllers\user\RecommendedArticleController;
+use App\Http\Controllers\user\SavedArticleController;
+use App\Http\Controllers\user\UserDetailController;
+use App\Http\Controllers\user\SearchController;
+use App\Http\Controllers\user\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
