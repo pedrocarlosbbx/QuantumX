@@ -35,7 +35,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Rute yang hanya bisa diakses oleh pengguna dengan peran admin
 });
 
-Route::group(['prefix' => 'articles'], function () {
+Route::group(['prefix' => 'user/articles'], function () {
     Route::get('/', [ArticleController::class, 'index']);
     Route::post('/', [ArticleController::class, 'store']);
     Route::get('/{id}', [ArticleController::class, 'show']);
@@ -43,7 +43,7 @@ Route::group(['prefix' => 'articles'], function () {
     Route::delete('/{id}', [ArticleController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'categories'], function () {
+Route::group(['prefix' => 'user/categories'], function () {
     Route::get('/', [CategoryController::class, 'index']);
     Route::post('/', [CategoryController::class, 'store']);
     Route::get('/{id}', [CategoryController::class, 'show']);
@@ -51,7 +51,7 @@ Route::group(['prefix' => 'categories'], function () {
     Route::delete('/{id}', [CategoryController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'tags'], function () {
+Route::group(['prefix' => 'user/tags'], function () {
     Route::get('/', [TagController::class, 'index']);
     Route::post('/', [TagController::class, 'store']);
     Route::get('/{id}', [TagController::class, 'show']);
@@ -59,7 +59,7 @@ Route::group(['prefix' => 'tags'], function () {
     Route::delete('/{id}', [TagController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'article-tags'], function () {
+Route::group(['prefix' => 'user/article-tags'], function () {
     Route::get('/', [ArticleTagController::class, 'index']);
     Route::post('/', [ArticleTagController::class, 'store']);
     Route::get('/{id}', [ArticleTagController::class, 'show']);
@@ -67,7 +67,7 @@ Route::group(['prefix' => 'article-tags'], function () {
     Route::delete('/{id}', [ArticleTagController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'comments'], function () {
+Route::group(['prefix' => 'user/comments'], function () {
     Route::get('/', [CommentController::class, 'index']);
     Route::post('/', [CommentController::class, 'store']);
     Route::get('/{id}', [CommentController::class, 'show']);
@@ -75,7 +75,7 @@ Route::group(['prefix' => 'comments'], function () {
     Route::delete('/{id}', [CommentController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'discussions'], function () {
+Route::group(['prefix' => 'user/discussions'], function () {
     Route::get('/', [DiscussionController::class, 'index']);
     Route::post('/', [DiscussionController::class, 'store']);
     Route::get('/{id}', [DiscussionController::class, 'show']);
@@ -83,7 +83,7 @@ Route::group(['prefix' => 'discussions'], function () {
     Route::delete('/{id}', [DiscussionController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'discussion-comments'], function () {
+Route::group(['prefix' => 'user/discussion-comments'], function () {
     Route::get('/', [DiscussionCommentController::class, 'index']);
     Route::post('/', [DiscussionCommentController::class, 'store']);
     Route::get('/{id}', [DiscussionCommentController::class, 'show']);
@@ -91,7 +91,7 @@ Route::group(['prefix' => 'discussion-comments'], function () {
     Route::delete('/{id}', [DiscussionCommentController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'curated-articles'], function () {
+Route::group(['prefix' => 'user/curated-articles'], function () {
     Route::get('/', [CuratedArticleController::class, 'index']);
     Route::post('/', [CuratedArticleController::class, 'store']);
     Route::get('/{id}', [CuratedArticleController::class, 'show']);
@@ -99,7 +99,7 @@ Route::group(['prefix' => 'curated-articles'], function () {
     Route::delete('/{id}', [CuratedArticleController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'recommended-articles'], function () {
+Route::group(['prefix' => 'user/recommended-articles'], function () {
     Route::get('/', [RecommendedArticleController::class, 'index']);
     Route::post('/', [RecommendedArticleController::class, 'store']);
     Route::get('/{id}', [RecommendedArticleController::class, 'show']);
@@ -107,7 +107,7 @@ Route::group(['prefix' => 'recommended-articles'], function () {
     Route::delete('/{id}', [RecommendedArticleController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'saved-articles'], function () {
+Route::group(['prefix' => 'user/saved-articles'], function () {
     Route::get('/', [SavedArticleController::class, 'index']);
     Route::post('/', [SavedArticleController::class, 'store']);
     Route::get('/{id}', [SavedArticleController::class, 'show']);
@@ -115,7 +115,7 @@ Route::group(['prefix' => 'saved-articles'], function () {
     Route::delete('/{id}', [SavedArticleController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'user-details'], function () {
+Route::group(['prefix' => 'user/user-details'], function () {
     Route::get('/', [UserDetailController::class, 'index']);
     Route::post('/', [UserDetailController::class, 'store']);
     Route::get('/{id}', [UserDetailController::class, 'show']);
@@ -123,7 +123,7 @@ Route::group(['prefix' => 'user-details'], function () {
     Route::delete('/{id}', [UserDetailController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'searches'], function () {
+Route::group(['prefix' => 'user/searches'], function () {
     Route::get('/', [SearchController::class, 'index']);
     Route::post('/', [SearchController::class, 'store']);
     Route::get('/{id}', [SearchController::class, 'show']);
@@ -131,7 +131,7 @@ Route::group(['prefix' => 'searches'], function () {
     Route::delete('/{id}', [SearchController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'dashboards'], function () {
+Route::group(['prefix' => 'user/dashboards'], function () {
     Route::get('/', [DashboardController::class, 'index']);
     Route::post('/', [DashboardController::class, 'store']);
     Route::get('/{id}', [DashboardController::class, 'show']);
