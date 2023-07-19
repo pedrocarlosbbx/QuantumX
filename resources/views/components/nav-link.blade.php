@@ -9,3 +9,6 @@ $classes = ($active ?? false)
 <a {{ $attributes->merge(['class' => $classes]) }}>
     {{ $slot }}
 </a>
+@if (request()->routeIs('dashboard'))
+    <span class="sr-only">Tambah</span>
+@endif

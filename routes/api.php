@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\user\ArticleCategoryController;
 use App\Http\Controllers\user\ArticleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -35,106 +36,46 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Rute yang hanya bisa diakses oleh pengguna dengan peran admin
 });
 
-Route::group(['prefix' => 'user/articles'], function () {
-    Route::get('/', [ArticleController::class, 'index']);
-    Route::post('/', [ArticleController::class, 'store']);
-    Route::get('/{id}', [ArticleController::class, 'show']);
-    Route::put('/{id}', [ArticleController::class, 'update']);
-    Route::delete('/{id}', [ArticleController::class, 'destroy']);
-});
+Route::group(['prefix' => 'user'], function () {
+    // Rute untuk ArticleController
+    Route::apiResource('articles', ArticleController::class);
 
-Route::group(['prefix' => 'user/categories'], function () {
-    Route::get('/', [CategoryController::class, 'index']);
-    Route::post('/', [CategoryController::class, 'store']);
-    Route::get('/{id}', [CategoryController::class, 'show']);
-    Route::put('/{id}', [CategoryController::class, 'update']);
-    Route::delete('/{id}', [CategoryController::class, 'destroy']);
-});
+    // Rute untuk CategoryController
+    Route::apiResource('categories', CategoryController::class);
 
-Route::group(['prefix' => 'user/tags'], function () {
-    Route::get('/', [TagController::class, 'index']);
-    Route::post('/', [TagController::class, 'store']);
-    Route::get('/{id}', [TagController::class, 'show']);
-    Route::put('/{id}', [TagController::class, 'update']);
-    Route::delete('/{id}', [TagController::class, 'destroy']);
-});
+    // Rute untuk TagController
+    Route::apiResource('tags', TagController::class);
 
-Route::group(['prefix' => 'user/article-tags'], function () {
-    Route::get('/', [ArticleTagController::class, 'index']);
-    Route::post('/', [ArticleTagController::class, 'store']);
-    Route::get('/{id}', [ArticleTagController::class, 'show']);
-    Route::put('/{id}', [ArticleTagController::class, 'update']);
-    Route::delete('/{id}', [ArticleTagController::class, 'destroy']);
-});
+    // Rute untuk ArticleTagController
+    Route::apiResource('article-tag', ArticleTagController::class);
 
-Route::group(['prefix' => 'user/comments'], function () {
-    Route::get('/', [CommentController::class, 'index']);
-    Route::post('/', [CommentController::class, 'store']);
-    Route::get('/{id}', [CommentController::class, 'show']);
-    Route::put('/{id}', [CommentController::class, 'update']);
-    Route::delete('/{id}', [CommentController::class, 'destroy']);
-});
+    // Rute untuk ArticleCategoryController
+    Route::apiResource('article-category', ArticleCategoryController::class);
 
-Route::group(['prefix' => 'user/discussions'], function () {
-    Route::get('/', [DiscussionController::class, 'index']);
-    Route::post('/', [DiscussionController::class, 'store']);
-    Route::get('/{id}', [DiscussionController::class, 'show']);
-    Route::put('/{id}', [DiscussionController::class, 'update']);
-    Route::delete('/{id}', [DiscussionController::class, 'destroy']);
-});
+    // Rute untuk CommentController
+    Route::apiResource('comments', CommentController::class);
 
-Route::group(['prefix' => 'user/discussion-comments'], function () {
-    Route::get('/', [DiscussionCommentController::class, 'index']);
-    Route::post('/', [DiscussionCommentController::class, 'store']);
-    Route::get('/{id}', [DiscussionCommentController::class, 'show']);
-    Route::put('/{id}', [DiscussionCommentController::class, 'update']);
-    Route::delete('/{id}', [DiscussionCommentController::class, 'destroy']);
-});
+    // Rute untuk DiscussionController
+    Route::apiResource('discussions', DiscussionController::class);
 
-Route::group(['prefix' => 'user/curated-articles'], function () {
-    Route::get('/', [CuratedArticleController::class, 'index']);
-    Route::post('/', [CuratedArticleController::class, 'store']);
-    Route::get('/{id}', [CuratedArticleController::class, 'show']);
-    Route::put('/{id}', [CuratedArticleController::class, 'update']);
-    Route::delete('/{id}', [CuratedArticleController::class, 'destroy']);
-});
+    // Rute untuk DiscussionCommentController
+    Route::apiResource('discussion-comments', DiscussionCommentController::class);
 
-Route::group(['prefix' => 'user/recommended-articles'], function () {
-    Route::get('/', [RecommendedArticleController::class, 'index']);
-    Route::post('/', [RecommendedArticleController::class, 'store']);
-    Route::get('/{id}', [RecommendedArticleController::class, 'show']);
-    Route::put('/{id}', [RecommendedArticleController::class, 'update']);
-    Route::delete('/{id}', [RecommendedArticleController::class, 'destroy']);
-});
+    // Rute untuk CuratedArticleController
+    Route::apiResource('curated-articles', CuratedArticleController::class);
 
-Route::group(['prefix' => 'user/saved-articles'], function () {
-    Route::get('/', [SavedArticleController::class, 'index']);
-    Route::post('/', [SavedArticleController::class, 'store']);
-    Route::get('/{id}', [SavedArticleController::class, 'show']);
-    Route::put('/{id}', [SavedArticleController::class, 'update']);
-    Route::delete('/{id}', [SavedArticleController::class, 'destroy']);
-});
+    // Rute untuk RecommendedArticleController
+    Route::apiResource('recommended-articles', RecommendedArticleController::class);
 
-Route::group(['prefix' => 'user/user-details'], function () {
-    Route::get('/', [UserDetailController::class, 'index']);
-    Route::post('/', [UserDetailController::class, 'store']);
-    Route::get('/{id}', [UserDetailController::class, 'show']);
-    Route::put('/{id}', [UserDetailController::class, 'update']);
-    Route::delete('/{id}', [UserDetailController::class, 'destroy']);
-});
+    // Rute untuk SavedArticleController
+    Route::apiResource('saved-articles', SavedArticleController::class);
 
-Route::group(['prefix' => 'user/searches'], function () {
-    Route::get('/', [SearchController::class, 'index']);
-    Route::post('/', [SearchController::class, 'store']);
-    Route::get('/{id}', [SearchController::class, 'show']);
-    Route::put('/{id}', [SearchController::class, 'update']);
-    Route::delete('/{id}', [SearchController::class, 'destroy']);
-});
+    // Rute untuk UserDetailController
+    Route::apiResource('user-details', UserDetailController::class);
 
-Route::group(['prefix' => 'user/dashboards'], function () {
-    Route::get('/', [DashboardController::class, 'index']);
-    Route::post('/', [DashboardController::class, 'store']);
-    Route::get('/{id}', [DashboardController::class, 'show']);
-    Route::put('/{id}', [DashboardController::class, 'update']);
-    Route::delete('/{id}', [DashboardController::class, 'destroy']);
+    // Rute untuk SearchController
+    Route::apiResource('searches', SearchController::class);
+
+    // Rute untuk DashboardController
+    Route::apiResource('dashboards', DashboardController::class);
 });
