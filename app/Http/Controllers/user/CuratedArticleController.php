@@ -42,13 +42,13 @@ class CuratedArticleController extends Controller
         }
 
         $request->validate([
-            'article_id' => 'required',
             'status' => 'required'
         ]);
 
-        $curatedArticle->update($request->all());
+        $curatedArticle->update($request->only('status'));
         return response()->json($curatedArticle, 200);
     }
+
 
     public function destroy($id)
     {

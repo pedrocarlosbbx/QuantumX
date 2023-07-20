@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
 {
@@ -19,6 +20,7 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'user_id' => 'required', // Tambahkan validasi untuk user_id
             'article_title' => 'required',
             'text' => 'required',
             'foto_article' => 'required|file|image|mimes:jpeg,png,jpg',
@@ -34,6 +36,7 @@ class ArticleController extends Controller
         $file->move($destination, $file_name);
 
         $article = new Article();
+        $article->user_id = $request->user_id; // Set user_id dari request
         $article->article_title = $request->article_title;
         $article->text = $request->text;
         $article->foto_article = $destination . "/" . $file_name;
@@ -54,6 +57,7 @@ class ArticleController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
+            'user_id' => 'required', // Tambahkan validasi untuk user_id
             'article_title' => 'required',
             'text' => 'required',
             'foto_article' => 'file|image|mimes:jpeg,png,jpg',
@@ -75,6 +79,7 @@ class ArticleController extends Controller
             return response()->json('Data tidak ditemukan', 404);
         }
 
+        $article->user_id = $request->user_id; // Set user_id dari request
         $article->article_title = $request->article_title;
         $article->text = $request->text;
         if (!is_null($request->foto_article)) {

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Role;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -46,14 +45,8 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'user', // Tambahkan nilai 'user' pada kolom role di tabel users
         ]);
-
-        // Menambahkan peran 'user' secara default
-        $role = Role::where('name', 'user')->first();
-        if ($role) {
-            $user->role_id = $role->id;
-            $user->save();
-        }
 
         event(new Registered($user));
 

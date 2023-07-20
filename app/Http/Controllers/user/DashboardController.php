@@ -19,7 +19,7 @@ class DashboardController extends Controller
         $request->validate([
             'user_id' => 'required',
             'recommended_article_id' => 'required',
-            'discussion_id' => 'required',
+            'discussion_id' => 'nullable', // Set as nullable for optional discussion_id
         ]);
 
         $dashboard = Dashboard::create($request->all());
@@ -45,7 +45,7 @@ class DashboardController extends Controller
         $request->validate([
             'user_id' => 'required',
             'recommended_article_id' => 'required',
-            'discussion_id' => 'required',
+            'discussion_id' => 'nullable', // Set as nullable for optional discussion_id
         ]);
 
         $dashboard->update($request->all());
